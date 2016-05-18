@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="jquery.svg.css"> 
+  <style>
+    #vcycle {
+      position:absolute;
+      top:30px;
+      width:716px;
+      height:716px;
+    }
+    #vcycleImage {
+      position: absolute;
+      top: 30px;
+    }
+    #foreground {
+      position: absolute;
+      top: 72px;
+      left:42px;
+      width:635px;
+    }
+    .arrow {
+      fill: #F5B317;
+    }
+    .slice {
+      stroke: #F5B317;
+      stroke-width: 0.1px;
+    }
+    .text {
+      font-family: Intel Clear Pro,Haettenschweiler,impact;
+      font-size: 24pt;
+      fill: white;
+      text-shadow: 2px 2px 2px grey;
+    }
+  </style>
+</head>
+<body>
+  <button id="hide">Hide</button>
+  <button id="faster">Faster</button>
+  <button id="slower">Slower</button>
+  <button id="stop">Stop</button>
+  <div>
+    <img id="vcycleImage" src="background.jpg" />
+    <div id="vcycle"></div>
+    <img id="foreground" src="foreground.png" />
+  </div>
+  <script type="text/javascript" src="jquery-1.12.2.min.js"></script>
+  <script type="text/javascript" src="jquery.svg.js"></script>
+  <script type="text/javascript" src="jquery.svgdom.js"></script>
+  <script type="text/javascript" src="vcycle.js"></script>
+  <script>
+  (function () {
+    var vcycle;
+    var hidden = false;
+    var spinSpeed = 0;
+
+    function hideShow() {
+      var $image = $("#vcycleImage");
+      if (hidden) {
+        $image.css("display", "");
+      }
+      else {
+        $image.css("display", "none");
+      }
+      hidden = !hidden;
+    }
+
+    function spinFaster() {
+      spinSpeed = spinSpeed + 1;
+      vcycle.spin(spinSpeed);
+    }
+
+    function spinSlower() {
+      spinSpeed = spinSpeed > 0 ? spinSpeed - 1 : 0;
+      vcycle.spin(spinSpeed);
+    }
+
+    function spinStop() {
+      spinSpeed = 0;
+      vcycle.spin(0);
+    }
+
+    function main() {
+      vcycle = new VCycle("#vcycle");
+      $("#hide").click(hideShow);
+      $("#faster").click(spinFaster);
+      $("#slower").click(spinSlower);
+      $("#stop").click(spinStop);
+    }
+    $(main);
+  })();
+  </script>
+</body>
+</html>
