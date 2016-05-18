@@ -44,15 +44,33 @@
     <div id="vcycle"></div>
     <img id="foreground" src="foreground.png" />
   </div>
+  <div>
+    <video id="webcam" muted autoplay width="640" height="480" style="display:none"></video>
+    <canvas id="canvas-source" width="640" height="480" style="display:none"></canvas>
+    <center>
+      <canvas id="canvas-blended" width="640" height="480" style="width: 320px; height: 240px; position: absolute; right: 5px; top: 140px; z-index: -1;display:none"></canvas>
+      <canvas id="canvas-grid" width="640" height="480" style="width: 320px; height: 240px; position: absolute; right: 5px; top: 140px; z-index: 1;display:none"></canvas>
+    </cetner>
+  </div>
+  <script type="text/javascript" src="dat.gui.js"></script>
   <script type="text/javascript" src="jquery-1.12.2.min.js"></script>
   <script type="text/javascript" src="jquery.svg.js"></script>
   <script type="text/javascript" src="jquery.svgdom.js"></script>
   <script type="text/javascript" src="vcycle.js"></script>
   <script>
+  var vcycle;
+  var spinSpeed = 0;
+  function spinFaster() {
+    spinSpeed = spinSpeed + 1;
+    vcycle.spin(spinSpeed);
+  }
+
+  function spinSlower() {
+    spinSpeed = spinSpeed > 0 ? spinSpeed - 1 : 0;
+    vcycle.spin(spinSpeed);
+  }
   (function () {
-    var vcycle;
     var hidden = false;
-    var spinSpeed = 0;
 
     function hideShow() {
       var $image = $("#vcycleImage");
@@ -63,16 +81,6 @@
         $image.css("display", "none");
       }
       hidden = !hidden;
-    }
-
-    function spinFaster() {
-      spinSpeed = spinSpeed + 1;
-      vcycle.spin(spinSpeed);
-    }
-
-    function spinSlower() {
-      spinSpeed = spinSpeed > 0 ? spinSpeed - 1 : 0;
-      vcycle.spin(spinSpeed);
     }
 
     function spinStop() {
@@ -86,6 +94,9 @@
       $("#faster").click(spinFaster);
       $("#slower").click(spinSlower);
       $("#stop").click(spinStop);
+      //initGUI();
+      initWebCam();
+      update();
     }
     $(main);
   })();
