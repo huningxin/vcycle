@@ -256,6 +256,7 @@ function differenceAccuracy(target, data1, data2) {
 }
 
 var Configuraton = function() {
+  this.showDetection = true;
   this.motionThreshold = 100;
   this.framesToSkip = 30;
   this.restructionSpeed = 0.05;
@@ -272,6 +273,15 @@ var config =new Configuraton();
 
 function initGUI() {
   var gui = new dat.GUI();
+  gui.add(config, 'showDetection').onFinishChange(function(value) {
+    if (value) {
+      canvasBlended.style.display = 'block';
+      canvasGrid.style.display = 'block';
+    } else {
+      canvasBlended.style.display = 'none';
+      canvasGrid.style.display = 'none';
+    }
+  });
   gui.add(config, 'motionThreshold', 10, 300).step(10);
   //gui.add(config, 'framesToSkip', 0, 100).step(1);
   gui.add(config, 'restructionSpeed', 0.0001, 0.1).step(0.0001);
