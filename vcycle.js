@@ -213,7 +213,8 @@ function update() {
   if (motion) {
     frames++;
     vcycle.update();
-    startDetection();
+    if (!config.disableDetection)
+      startDetection();
   }
   requestAnimationFrame(update);
 }
@@ -272,7 +273,8 @@ function differenceAccuracy(target, data1, data2) {
   }
 }
 
-var Configuraton = function() {
+var Configuration = function() {
+  this.disableDetection = false;
   this.showDetection = true;
   this.motionThreshold = 100;
   this.framesToSkip = 30;
@@ -286,10 +288,11 @@ var Configuraton = function() {
   this.bottom = 3;
 }
 
-var config =new Configuraton();
+var config = new Configuration();
 
 function initGUI() {
   var gui = new dat.GUI();
+  gui.add(config, 'disableDetection');
   gui.add(config, 'showDetection').onFinishChange(function(value) {
     if (value) {
       canvasBlended.style.display = 'block';
