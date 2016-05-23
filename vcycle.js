@@ -151,13 +151,27 @@ var VCycle = (function () {
     this.speed = 0;
     this.interval = Number.MAX_VALUE;
     this.lastUpdate = 0;
+    this.rotationStep = 2;
     createCycle(this, domSelector, makeCycle);
   }
 
   Vcycle.prototype.spin = function (speed) {
-
+    const minInternval = 1000/60;
     this.speed = speed;
-    this.interval = 1000/(10*speed);
+    newInterval = 1000/(10*speed);
+
+    if (newInterval < minInternval) {
+      if (newInterval < this.interval) {
+        this.rotationStep += 2;
+      }
+      else {
+        this.rotationStep -= 2;
+      }
+    } else {
+      this.rotationStep = 2;
+    }
+
+    this.interval = newInterval;
 
     console.log("Spinning: " + speed);
   }
@@ -170,7 +184,7 @@ var VCycle = (function () {
     var now = Date.now();
     var elapsedTime = now - this.lastUpdate;
     if (elapsedTime > this.interval) {
-      this.rotation += 2;
+      this.rotation += this.rotationStep;
       $("#top", this.svg.root()).attr("transform", rotatePre + this.rotation + rotatePost);
       this.lastUpdate = now;
     }
