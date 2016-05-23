@@ -148,27 +148,32 @@ var VCycle = (function () {
     this.domSelector = domSelector;
     this.rotation = 0;
     this.timer = null;
+    this.speed = 0;
+    this.interval = Number.MAX_VALUE;
+    this.lastUpdate = 0;
     createCycle(this, domSelector, makeCycle);
   }
 
   Vcycle.prototype.spin = function (speed) {
 
-    var self = this;
-
-    function rotate() {
-      self.rotation += 2;
-      $("#top", self.svg.root()).attr("transform", rotatePre + self.rotation + rotatePost);
-    }
-
-    if (this.timer != null) {
-      clearInterval(this.timer);
-    }
-    if (speed > 0) {
-      var timeoutValue = 1000/(10*speed);
-      this.timer = setInterval(rotate, timeoutValue);
-    }
+    this.speed = speed;
+    this.interval = 1000/(10*speed);
 
     console.log("Spinning: " + speed);
+  }
+
+  Vcycle.prototype.update = function () {
+    if (this.lastUpdate == 0) {
+      this.lastUpdate = Date.now();
+      return;
+    }
+    var now = Date.now();
+    var elapsedTime = now - this.lastUpdate;
+    if (elapsedTime > this.interval) {
+      this.rotation += 2;
+      $("#top", this.svg.root()).attr("transform", rotatePre + this.rotation + rotatePost);
+      this.lastUpdate = now;
+    }
   }
 
   return Vcycle;
@@ -207,15 +212,27 @@ var frames = 0;
 function update() {
   if (motion) {
     frames++;
-    drawVideo();
-    blend();
-    checkAreas();
+    vcycle.update();
+    startDetection();
   }
   requestAnimationFrame(update);
 }
 
+var detecting = false;
+function startDetection() {
+  if (!detecting) {
+      detecting = true;
+      setTimeout(drawVideo, 0);
+    }
+}
+
+function finishDetection() {
+  detecting = false;
+}
+
 function drawVideo() {
   contextSource.drawImage(webcam, 0, 0, webcam.width, webcam.height);
+  setTimeout(blend, 0);
 }
 
 function fastAbs(value) {
@@ -358,9 +375,10 @@ function checkSwipe(column) {
 }
 
 function checkAreas() {
-  if (frames < config.framesToSkip)
+  if (frames < config.framesToSkip) {
+    finishDetection();
     return;
-  else if (frames == config.framesToSkip)
+  } else if (frames == config.framesToSkip)
     console.log('start checkAreas');
   // loop over the note areas
   var detected = 0;
@@ -390,6 +408,7 @@ function checkAreas() {
     //console.log('checkAreas done, average = ' + sum / detected);
     checkSwipe(sum / detected);
   }
+  finishDetection();
 }
 
 function blend() {
@@ -407,4 +426,5 @@ function blend() {
   contextBlended.putImageData(blendedData, 0, 0);
   // store the current webcam image
   lastImageData = sourceData;
+  setTimeout(checkAreas, 0);
 }
