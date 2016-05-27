@@ -305,7 +305,8 @@ var Configuration = function() {
 var config = new Configuration();
 
 function initGUI() {
-  var gui = new dat.GUI();
+  var gui = new dat.GUI({ autoPlace: false });
+  document.body.appendChild(gui.domElement);
   gui.add(config, 'disableDetection');
   gui.add(config, 'showDetection').onFinishChange(function(value) {
     if (value) {

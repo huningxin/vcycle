@@ -6,18 +6,24 @@
     #vcycle {
       position:absolute;
       top:30px;
+      right: 5px;
       width:716px;
       height:716px;
     }
     #vcycleImage {
       position: absolute;
+      right: 5px;
       top: 30px;
     }
     #foreground {
       position: absolute;
       top: 72px;
-      left:42px;
+      right: 42px;
       width:635px;
+    }
+    #buttons {
+      position: absolute;
+      right: 5px;
     }
     .arrow {
       fill: #F5B317;
@@ -35,10 +41,12 @@
   </style>
 </head>
 <body>
-  <button id="hide">Hide</button>
-  <button id="faster">Faster</button>
-  <button id="slower">Slower</button>
-  <button id="stop">Stop</button>
+  <div id="buttons">
+    <button id="hide">Hide</button>
+    <button id="faster">Faster</button>
+    <button id="slower">Slower</button>
+    <button id="stop">Stop</button>
+  </div>
   <div>
     <img id="vcycleImage" src="background.jpg" />
     <div id="vcycle"></div>
@@ -48,8 +56,8 @@
     <video id="webcam" muted autoplay width="640" height="480" style="display:none"></video>
     <canvas id="canvas-source" width="640" height="480" style="display:none"></canvas>
     <center>
-      <canvas id="canvas-blended" width="640" height="480" style="width: 320px; height: 240px; position: absolute; right: 5px; top: 240px; z-index: -2;"></canvas>
-      <canvas id="canvas-grid" width="640" height="480" style="width: 320px; height: 240px; position: absolute; right: 5px; top: 240px; z-index: -1;"></canvas>
+      <canvas id="canvas-blended" width="640" height="480" style="width: 320px; height: 240px; position: absolute; left: 5px; top: 240px; z-index: -2;"></canvas>
+      <canvas id="canvas-grid" width="640" height="480" style="width: 320px; height: 240px; position: absolute; left: 5px; top: 240px; z-index: -1;"></canvas>
     </cetner>
   </div>
   <script type="text/javascript" src="dat.gui.js"></script>
