@@ -14,7 +14,7 @@ var VCycle = (function () {
     innerRadiusText: 154,
     arrowSizeBase: 60,
     arrowSizeLeg: 45,
-    center: [195, 200],
+    center: [202, 200],
     gradient: {
       steps: 100,
       centerStep: 20,
