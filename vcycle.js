@@ -1,3 +1,6 @@
+//
+// Authors: Peter Jensen & Ningxin Hu
+//
 var VCycle = (function () {
 
   const x = 0;
@@ -11,7 +14,7 @@ var VCycle = (function () {
     innerRadiusText: 154,
     arrowSizeBase: 60,
     arrowSizeLeg: 45,
-    center: [195, 200],
+    center: [202, 200],
     gradient: {
       steps: 100,
       centerStep: 20,
@@ -201,7 +204,13 @@ var webcam, canvasSource, canvasBlended, contextSource, contextBlended, lastImag
 var canvasGrid, contextGrid;
 var motion = false;
 
+var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || null;
+
 function initWebCam() {
+  if (getUserMedia === null) {
+    motion = true;
+    return;
+  }
   webcam = document.getElementById('webcam');
   canvasSource = document.getElementById('canvas-source');
   canvasBlended = document.getElementById('canvas-blended');
@@ -209,7 +218,7 @@ function initWebCam() {
   contextSource = canvasSource.getContext('2d');
   contextBlended = canvasBlended.getContext('2d');
 
-  navigator.webkitGetUserMedia({video: true}, function(stream) {
+  getUserMedia.call(navigator, {video: true}, function(stream) {
       webcam.src = window.URL.createObjectURL(stream);
       webcam.onplay = function() {
         motion = true;
