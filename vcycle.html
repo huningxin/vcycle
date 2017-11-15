@@ -74,13 +74,14 @@
   <script>
   var vcycle;
   var spinSpeed = 0;
+  var spinStep = 3;
   function spinFaster() {
-    spinSpeed = spinSpeed + 1;
+    spinSpeed = spinSpeed + spinStep;
     vcycle.spin(spinSpeed);
   }
 
   function spinSlower() {
-    spinSpeed = spinSpeed > 0 ? spinSpeed - 1 : 0;
+    spinSpeed = (spinSpeed - spinStep) >= 0 ? (spinSpeed - spinStep) : 0;
     vcycle.spin(spinSpeed);
   }
   (function () {
