@@ -296,9 +296,34 @@ function differenceAccuracy(target, data1, data2) {
   }
 }
 
+function getUrlParams( prop ) {
+  var params = {};
+  var search = decodeURIComponent( window.location.href.slice( window.location.href.indexOf( '?' ) + 1 ) );
+  var definitions = search.split( '&' );
+
+  definitions.forEach( function( val, key ) {
+      var parts = val.split( '=', 2 );
+      params[ parts[ 0 ] ] = parts[ 1 ];
+  } );
+
+  return ( prop && prop in params ) ? params[ prop ] : params;
+}
+
+var spinStep = 3;
+try {
+  let step = parseInt(getUrlParams('spinStep'));
+  if (!isNaN(step))
+    spinStep = step;
+} catch(e) {
+  console.log(e);
+}
+
+console.log(`spinStep: ${spinStep}`);
+
 var Configuration = function() {
   this.disableDetection = false;
   this.showDetection = true;
+  this.spinStep = spinStep;
   this.motionThreshold = 100;
   this.framesToSkip = 30;
   this.restructionSpeed = 0.05;
@@ -326,6 +351,7 @@ function initGUI() {
       canvasGrid.style.display = 'none';
     }
   });
+  gui.add(config, 'spinStep', 1, 10).step(1);
   gui.add(config, 'motionThreshold', 10, 300).step(10);
   //gui.add(config, 'framesToSkip', 0, 100).step(1);
   gui.add(config, 'restructionSpeed', 0.0001, 0.1).step(0.0001);
